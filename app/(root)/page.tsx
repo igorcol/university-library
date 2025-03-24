@@ -4,11 +4,23 @@ import { sampleBooks } from "@/constants";
 
 const Home = () => (
   <>
-    <BookOverview {...sampleBooks[0]}/>
+    {/* OVERVIEW */}
+    <BookOverview 
+      {...{
+        ...sampleBooks[0],
+        color: sampleBooks[0].coverColor,
+        video: sampleBooks[0].videoUrl,
+      }}
+    />
 
+    {/* BOOK LIST */}
     <BookList 
       title='Latest Books'
-      books={sampleBooks}
+      books={sampleBooks.map(book => ({
+        ...book,
+        color: book.coverColor,
+        video: book.videoUrl,
+      }))}
       containerClassname="mt-28"
     />
   </>
