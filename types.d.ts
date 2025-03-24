@@ -4,11 +4,11 @@ interface Book {
     author: string
     genre: string
     rating: number
-    totalBooks: number
-    availableBooks: number
+    totalCopies: number
+    availableCopies: number
     description: string
     color: string
-    cover: string
+    coverUrl: string
     video: string
     summary: string
     isLoanedBook?: boolean
