@@ -14,10 +14,10 @@ type InitialData = {
 // -- INTERVALS --
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 const THREE_DAYS_IN_MS = 3 * ONE_DAY_IN_MS;
-const SEVEN_DAYS_IN_MS = 6.5 * ONE_DAY_IN_MS; // ! MAX DELAY IN FREE QSTASH
+const SIX_DAYS_IN_MS = 6 * ONE_DAY_IN_MS; // ! MAX DELAY IN FREE QSTASH
 //const THIRTY_DAYS_IN_MS = 30 * ONE_DAY_IN_MS;
 
-const NON_ACTIVE_LIMIT = SEVEN_DAYS_IN_MS;
+const NON_ACTIVE_LIMIT = SIX_DAYS_IN_MS;
 
 //* Get User State
 // Check the last activity state and return UserState
@@ -78,7 +78,7 @@ export const { POST } = serve<InitialData>(async (context) => {
       })
     }
 
-    await context.sleep("wait-for-1-week", SEVEN_DAYS_IN_MS)
+    await context.sleep("wait-for-1-week", NON_ACTIVE_LIMIT)
   }
 })
 
