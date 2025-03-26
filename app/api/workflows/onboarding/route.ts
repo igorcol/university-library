@@ -14,7 +14,10 @@ type InitialData = {
 // -- INTERVALS --
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 const THREE_DAYS_IN_MS = 3 * ONE_DAY_IN_MS;
-const THIRTY_DAYS_IN_MS = 30 * ONE_DAY_IN_MS;
+const SEVEN_DAYS_IN_MS = 7 * ONE_DAY_IN_MS; // ! MAX DELAY IN FREE QSTASH
+//const THIRTY_DAYS_IN_MS = 30 * ONE_DAY_IN_MS;
+
+const NON_ACTIVE_LIMIT = SEVEN_DAYS_IN_MS;
 
 //* Get User State
 // Check the last activity state and return UserState
@@ -31,7 +34,7 @@ const getUserState = async (email: string): Promise<UserState> => {
   const now = new Date();
   const time_difference = now.getTime() - lastActivityDate.getTime();
 
-  if(time_difference > THREE_DAYS_IN_MS && time_difference <= THIRTY_DAYS_IN_MS) {
+  if(time_difference > THREE_DAYS_IN_MS && time_difference <= NON_ACTIVE_LIMIT) {
     return 'non-active'
   } 
 
@@ -75,7 +78,7 @@ export const { POST } = serve<InitialData>(async (context) => {
       })
     }
 
-    await context.sleep("wait-for-1-month", THIRTY_DAYS_IN_MS)
+    await context.sleep("wait-for-1-week", SEVEN_DAYS_IN_MS)
   }
 })
 
