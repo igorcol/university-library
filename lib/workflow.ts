@@ -11,7 +11,7 @@ export const sendEmail = async ({ email, subject, message }: { email: string, su
     const payload = {
         service_id: config.env.emailJS.serviceId,
         template_id: config.env.emailJS.templateId,
-        user_id: config.env.emailJS.publicKey,
+        //user_id: config.env.emailJS.publicKey,
         template_params: {
             to_email: email,
             subject: subject,
