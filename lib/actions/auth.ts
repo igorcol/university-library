@@ -8,22 +8,26 @@ import { eq } from "drizzle-orm"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import ratelimit from "../ratelimit"
+import { workflowClient } from "../workflow"
+import { url } from "inspector"
+import config from "../config"
 
-export const signInWithCredentials = async (params: Pick<AuthCredentials, 'email' | 'password'> ) => {
+// * SIGN IN
+export const signInWithCredentials = async (params: Pick<AuthCredentials, 'email' | 'password'>) => {
     const { email, password } = params;
 
     // Rate Limit
     const ip = (await headers()).get('x-forwarded-for') || '127.0.0.1';
     const { success } = await ratelimit.limit(ip);
-    if(!success) return redirect('/too-fast');
+    if (!success) return redirect('/too-fast');
 
     try {
         const result = await signIn('credentials', {
             email, password,
-            redirect: false 
+            redirect: false
         })
-        
-        if(result?.error) {
+
+        if (result?.error) {
             return {
                 success: false,
                 error: result.error
@@ -33,7 +37,7 @@ export const signInWithCredentials = async (params: Pick<AuthCredentials, 'email
         return { success: true }
     }
     catch (error) {
-        console.log(error,'SignIn Error')
+        console.log(error, 'SignIn Error')
         return {
             success: false,
             error: "Sign In error"
@@ -41,13 +45,14 @@ export const signInWithCredentials = async (params: Pick<AuthCredentials, 'email
     }
 }
 
+// * SIGN UP
 export const signUp = async (params: AuthCredentials) => {
     const { fullName, email, universityId, password, universityCard } = params
 
     // Rate Limit
     const ip = (await headers()).get('x-forwarded-for') || '127.0.0.1';
     const { success } = await ratelimit.limit(ip);
-    if(!success) return redirect('/too-fast');
+    if (!success) return redirect('/too-fast');
 
     // Ve se usuario ja existe
     const existingUser = await db.select().from(users).where(eq(users.email, email)).limit(1)
@@ -67,11 +72,20 @@ export const signUp = async (params: AuthCredentials) => {
             universityCard
         })
 
-        await signInWithCredentials({email, password}) // Automatic sign in
+        // Trigger the email workflow
+        await workflowClient.trigger({
+            url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
+            body: {
+                email,
+                fullName
+            }
+        })
+
+        await signInWithCredentials({ email, password }) // Automatic sign in
         return { success: true };
     }
     catch (error) {
-        console.log(error,'SignUp Error')
+        console.log(error, 'SignUp Error')
         return {
             success: false,
             error: "Sign Up error"
