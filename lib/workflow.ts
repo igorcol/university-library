@@ -21,7 +21,7 @@ export const sendEmail = async ({ email, subject, message }: { email: string, su
     console.log("...EMAIL PAYLOAD", JSON.stringify(payload, null, 2))
 
     // Envia
-    const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+    const res = await fetch("https://api.emailjs.com/api/v1.0/email/send-private", {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
