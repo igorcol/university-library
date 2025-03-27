@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { bookSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import FileUpload from "@/components/FileUpload";
 
 interface Props extends Partial<Book> {
   type?: "create" | "update";
@@ -120,8 +121,9 @@ function BookForm({ type, ...book }: Props) {
               </FormLabel>
               <FormControl>
                 <Input
-                  type='number'
-                  min={1}  max={5}
+                  type="number"
+                  min={1}
+                  max={5}
                   placeholder="Book Rating"
                   {...field}
                   className="book-form-input"
@@ -142,8 +144,9 @@ function BookForm({ type, ...book }: Props) {
               </FormLabel>
               <FormControl>
                 <Input
-                  type='number'
-                  min={1}  max={1000}
+                  type="number"
+                  min={1}
+                  max={1000}
                   placeholder="Total Copies"
                   {...field}
                   className="book-form-input"
@@ -163,7 +166,15 @@ function BookForm({ type, ...book }: Props) {
                 Book Image
               </FormLabel>
               <FormControl>
-                {/* File Upload */}
+                <FileUpload
+                  type="image"
+                  accept="image/*"
+                  placeholder="Upload a Book Cover"
+                  folder="books/covers"
+                  variant="light"
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -178,9 +189,7 @@ function BookForm({ type, ...book }: Props) {
               <FormLabel className="text-base font-normal text-dark-500">
                 Primary Cover Color
               </FormLabel>
-              <FormControl>
-                {/* Color Picker */}
-              </FormControl>
+              <FormControl>{/* Color Picker */}</FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -196,17 +205,17 @@ function BookForm({ type, ...book }: Props) {
               </FormLabel>
               <FormControl>
                 <Textarea
-                    placeholder="Book Description..."
-                    {...field}
-                    rows={10}
-                    className="book-form_input"
+                  placeholder="Book Description..."
+                  {...field}
+                  rows={10}
+                  className="book-form_input"
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* Cover Url */}
+        {/* Video Url */}
         <FormField
           control={form.control}
           name="videoUrl"
@@ -216,7 +225,15 @@ function BookForm({ type, ...book }: Props) {
                 Book Trailer
               </FormLabel>
               <FormControl>
-                {/* File Upload */}
+              <FileUpload
+                  type="video"
+                  accept="video/*"
+                  placeholder="Upload the Book Trailer"
+                  folder="books/videos"
+                  variant="light"
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -233,10 +250,10 @@ function BookForm({ type, ...book }: Props) {
               </FormLabel>
               <FormControl>
                 <Textarea
-                    placeholder="Book Sumary..."
-                    {...field}
-                    rows={5}
-                    className="book-form_input"
+                  placeholder="Book Sumary..."
+                  {...field}
+                  rows={5}
+                  className="book-form_input"
                 />
               </FormControl>
               <FormMessage />
@@ -245,8 +262,8 @@ function BookForm({ type, ...book }: Props) {
         />
 
         {/* ADD BTN */}
-        <Button type='submit' className="book-form_btn text-white">
-            Add Book to Library
+        <Button type="submit" className="book-form_btn text-white">
+          Add Book to Library
         </Button>
       </form>
     </Form>
