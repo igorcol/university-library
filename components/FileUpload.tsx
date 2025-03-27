@@ -47,10 +47,12 @@ const FileUpload = ({
   placeholder,
   folder,
   variant,
-  value
+  value,
 }: Props) => {
   const ikUploadRef = useRef(null);
-  const [file, setFile] = useState<{ filePath: string | null }>({ filePath: value ?? null});
+  const [file, setFile] = useState<{ filePath: string | null }>({
+    filePath: value ?? null,
+  });
   const [progress, setProgress] = useState(0);
 
   const styles = {
@@ -123,7 +125,7 @@ const FileUpload = ({
         onUploadProgress={({ loaded, total }) => {
           const percent = Math.round(loaded / total / 100); // Get progress percentage
           setProgress(percent);
-          console.log(progress)
+          console.log(progress);
         }}
         folder={folder}
         accept={accept}
@@ -165,23 +167,21 @@ const FileUpload = ({
       )}
 
       {/* FILE PREVIEW */}
-      {file && (
-        (type === 'image' ? (
+      {file &&
+        (type === "image" ? (
           <IKImage
-          alt={file.filePath}
-          path={file.filePath}
-          width={500}
-          height={300}
-        />
-        ) : type === 'video' ? (
+            alt={file.filePath}
+            path={file.filePath}
+            width={500}
+            height={300}
+          />
+        ) : type === "video" ? (
           <IKVideo
             path={file.filePath}
             controls={true}
             className="h-96 w-full rounded-xl"
           />
-        ): null)
-        
-      )}
+        ) : null)}
     </ImageKitProvider>
   );
 };
