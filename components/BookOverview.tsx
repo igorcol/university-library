@@ -21,19 +21,23 @@ const BookOverview = async ({
   coverColor,
   coverUrl,
   id,
-  userId
+  userId,
 }: Props) => {
   // Fetch user data
-  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!user) return null;
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
 
   // Figure out if user account is approved
   const borrowingEligibility = {
-    isEligible: availableCopies > 0 && user.status === 'APPROVED',
-    message: availableCopies <= 0 
-      ? 'Book is not available'
-      : 'Your account is not eligible to borrow books'
-  }
+    isEligible: availableCopies > 0 && user?.status === "APPROVED",
+    message:
+      availableCopies <= 0
+        ? "Book is not available"
+        : "Your account is not eligible to borrow books",
+  };
 
   return (
     <section className="book-overview">
@@ -65,9 +69,15 @@ const BookOverview = async ({
         </div>
 
         <p className="book-description">{description}</p>
-        
+
         {/* Borrow Btn */}
-        <BorrowBook bookId={id} userId={userId} borrowingEligibility={borrowingEligibility} /> 
+        {user && (
+          <BorrowBook
+            bookId={id}
+            userId={userId}
+            borrowingEligibility={borrowingEligibility}
+          />
+        )}
       </div>
 
       <div className="relative flex flex-1 justify-center">
@@ -80,7 +90,11 @@ const BookOverview = async ({
           />
 
           <div className="absolute lef-16 top-10 rotate-12 opacity-40 max-sm:hidden">
-            <BookCover variant="wide" coverColor={coverColor} coverImage={coverUrl} />
+            <BookCover
+              variant="wide"
+              coverColor={coverColor}
+              coverImage={coverUrl}
+            />
           </div>
         </div>
       </div>
