@@ -23,9 +23,9 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
-import ImageUpload from "./ImageUpload";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import FileUpload from "./FileUpload";
 
 //TODO 1:25:32
 
@@ -58,13 +58,12 @@ function AuthForm<T extends FieldValues>({
         title: "Success",
         description: "Successfully " + isSignIn ? "signed in." : "signed up",
       });
-      router.push('/');
-    }
-    else {
+      router.push("/");
+    } else {
       toast({
-        title: `Error ${isSignIn ? 'Signing in' : 'Signing up'}`,
-        description: result.error ?? 'An error ocurred.',
-        variant: 'destructive'
+        title: `Error ${isSignIn ? "Signing in" : "Signing up"}`,
+        description: result.error ?? "An error ocurred.",
+        variant: "destructive",
       });
     }
   };
@@ -99,7 +98,14 @@ function AuthForm<T extends FieldValues>({
                   </FormLabel>
                   <FormControl>
                     {field.name === "universityCard" ? (
-                      <ImageUpload onFileChange={field.onChange} />
+                      <FileUpload
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload Your ID"
+                        folder="ids"
+                        variant="dark"
+                        onFileChange={field.onChange}
+                      />
                     ) : (
                       <Input
                         className="form-input"
